@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>경영전략팀 회고 아카이브</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F2EFE8;
+    --paper-raised:#FBFAF6;
+    --ink:#20262E;
+    --ink-soft:#565F6B;
+    --line:#DAD4C4;
+    --teal:#2F5D62;
+    --moss:#52684A;
+    --wine:#7A3B34;
+    --gold:#B9944A;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Noto Sans KR', sans-serif;
+    line-height:1.6;
+  }
+  h1,h2,h3,.serif{
+    font-family:'Noto Serif KR', serif;
+  }
+
+  /* ---------- Layout ---------- */
+  .frame{
+    max-width:1180px;
+    margin:0 auto;
+    padding:56px 32px 96px;
+  }
+
+  header.masthead{
+    border-bottom:2px solid var(--ink);
+    padding-bottom:28px;
+    margin-bottom:8px;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    flex-wrap:wrap;
+    gap:16px;
+  }
+  header.masthead .title-block h1{
+    font-size:clamp(28px,4vw,40px);
+    font-weight:700;
+    margin:0 0 6px;
+    letter-spacing:-0.01em;
+  }
+  header.masthead .title-block p{
+    margin:0;
+    color:var(--ink-soft);
+    font-size:14px;
+  }
+  header.masthead .meta{
+    text-align:right;
+    font-size:13px;
+    color:var(--ink-soft);
+    font-family:'Noto Serif KR', serif;
+    font-style:italic;
+  }
+
+  /* ---------- Month tabs (dossier folder style) ---------- */
+  nav.months{
+    display:flex;
+    gap:2px;
+    margin-top:26px;
+  }
+  nav.months button{
+    font-family:'Noto Serif KR', serif;
+    font-size:15px;
+    background:transparent;
+    border:1px solid var(--line);
+    border-bottom:none;
+    color:var(--ink-soft);
+    padding:10px 22px 12px;
+    cursor:pointer;
+    border-radius:6px 6px 0 0;
+    position:relative;
+    top:1px;
+  }
+  nav.months button.active{
+    background:var(--paper-raised);
+    color:var(--ink);
+    font-weight:600;
+    border-color:var(--line);
+    box-shadow:0 -1px 0 var(--paper-raised);
+  }
+  .tab-panel-top{
+    border-top:1px solid var(--line);
+    margin-bottom:36px;
+  }
+
+  /* ---------- Member cards ---------- */
+  .roster{
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+  }
+  .member{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    padding:26px 30px;
+  }
+  .member + .member{
+    border-top:none;
+  }
+  .member.leave{
+    padding:16px 30px;
+  }
+  .member-head{
+    display:flex;
+    align-items:baseline;
+    gap:12px;
+    margin-bottom:16px;
+  }
+  .member-head .name{
+    font-family:'Noto Serif KR', serif;
+    font-size:22px;
+    font-weight:700;
+  }
+  .member-head .tag{
+    font-size:12px;
+    color:var(--ink-soft);
+    border:1px solid var(--line);
+    padding:2px 9px;
+    border-radius:20px;
+  }
+
+  .blocks{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px 22px;
+  }
+  .block{
+    padding:2px 0 2px 14px;
+    border-left:3px solid var(--line);
+  }
+  .block .label{
+    font-family:'Noto Serif KR', serif;
+    font-size:13px;
+    font-weight:600;
+    margin-bottom:5px;
+    color:var(--ink-soft);
+  }
+  .block p{
+    margin:0;
+    font-size:14px;
+    color:var(--ink);
+  }
+  .block.work{ grid-column:1 / -1; border-left-color:var(--ink); }
+  .block.good{ border-left-color:var(--moss); }
+  .block.good .label{ color:var(--moss); }
+  .block.bad{ border-left-color:var(--wine); }
+  .block.bad .label{ color:var(--wine); }
+  .block.note{ grid-column:1 / -1; border-left-color:var(--teal); }
+  .block.note .label{ color:var(--teal); }
+
+  @media (max-width:640px){
+    .blocks{grid-template-columns:1fr;}
+    .frame{padding:36px 18px 60px;}
+    .member{padding:20px;}
+  }
+
+  footer{
+    margin-top:48px;
+    padding-top:18px;
+    border-top:1px solid var(--line);
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+</style>
+</head>
+<body>
+<div class="frame">
+
+  <header class="masthead">
+    <div class="title-block">
+      <h1>경영전략팀 회고 아카이브</h1>
+      <p>매월 팀원별 업무 회고를 기록합니다</p>
+    </div>
+    <div class="meta">team_26</div>
+  </header>
+
+  <nav class="months" id="monthNav"></nav>
+  <div class="tab-panel-top"></div>
+
+  <main id="roster" class="roster"></main>
+
+  <footer>구성원 스스로 작성한 월간 회고를 그대로 정리한 내부 기록입니다.</footer>
+</div>
+
+<script>
+/* ============================================================
+   월별 회고 데이터
+   새 달을 추가할 때는 archiveData 객체에 "YYYY-MM": { label, members: [...] }
+   형태로 블록을 하나 더 추가하면 됩니다.
+   각 member는 { name, onLeave?, work, good, bad, note } 형태입니다.
+   onLeave: true 인 경우 회고 없이 이름만 표시됩니다.
+============================================================ */
+const archiveData = {
+  "2026-08": {
+    label: "8월",
+    members: [
+      {
+        name: "플투",
+        work: "라이드플러스 Deal 추진, 모두의주차장 Deal 추진, APEX 재무 모델링, STIC 투자 대응 IR, HR 기획 지원",
+        good: "투자 유치/투자/인수/자금 관점에서 각기 다른 스토리와 숫자를 만들었던 것",
+        bad: "던져놓은 것은 많은데, 이루어진 것이 부족한 것 같음",
+        note: "회사 HR 기조에 따라 하반기 선택과 집중 필요"
+      },
+      {
+        name: "체라",
+        work: "F-SPA 검토, 라이드 검토, 라이드플러스 IPO 예심청구 대응/구주거래, 27년 사업계획 사전준비, 기업소개서, Proj.M",
+        good: "라이드플러스 예심청구 대응 과정에서 회사 관점에서 이익과 리스크를 먼저 생각하는 방식으로 조금 성장(제이크의 가르침 실전 적용). 기업소개서 초안을 잘 잡고 디자인 착수 코앞까지 진행",
+        bad: "SPA 검토 속도를 잘 내지 못했음",
+        note: "SPA 추석 전에 마무리, 라플 구주거래도 원활하게 진행되도록 챙기기, 사업계획 잘 진행, 라이드의 크리에이티브한 구조 고민 필요"
+      },
+      { name: "메텔", onLeave: true, tag: "휴직" },
+      {
+        name: "릴로",
+        work: "2Q 실적발표, 반기보고서 작성 및 제출, 제8차 이사회·감사위원회 운영, 자기주식 매입 운용, 스톡옵션 취소 공시, 신설법인 설립 추진, 카카오증권 유튜브 IR 점검·취소 공시, 임원배상책임보험 갱신",
+        good: "실적발표, 반기보고서, 이사회, 감사위원회 일정 차질 없이 완료. 신규 법인 설립 과정에서 정관 중복 리스크 확인 및 대응안 제시",
+        bad: "실적발표·이사회·반기보고서 마감이 한 주에 겹치면서 반기보고서를 짧게 압축해 진행하게 된 점",
+        note: "스톡옵션 데이터 간소화 작업"
+      },
+      {
+        name: "뮤",
+        work: "2Q 실적발표, 쏘카 이사회, 에이펙스 100억 유상증자, 에이펙스 주식사무 총괄, 자금전략 TF 질의 대응, 벤츠 고객경험 프로그램 기획 및 미팅, Pjt C TDD",
+        good: "주식사무 큰 이슈 없이 클리어, 2Q 실적발표 큰 잡음 없이 매끄럽게 처리, TDD 빠르게 완료, 벤츠 미팅 속도감 있게 진행",
+        bad: "자금전략 TF를 주도적으로 진행하지 못하고 간접지원에 그침, Pjt F는 체라·주디한테 미룸, 기업소개서는 엘라·체라한테 미룸",
+        note: "하반기에는 더 새로운 업무에 집중하고 기존 업무는 빠르게 쳐낼 수 있으면 좋겠음(특히 이사회 업무에 너무 많은 시간 할애하지 않도록)"
+      },
+      {
+        name: "엘라",
+        work: "신한금융그룹 여신 확보 추진 및 금리협상/심사 자료 준비, 하나은행 신디케이션 deal 구조 확정, 기업소개서, 토스페이 도입 추진 및 기타 PG사 전반 검토(법무/보안/개발 등)",
+        good: "(1금융권) 최종적으로 원하는 금리 내 여신 확보, (금융/결제) 대내외 유관부서 간 원활한 업무 협의",
+        bad: "확장성 있는 신사업 추진 필요(보험, PG 등)",
+        note: "금융 제휴기관 추가 거래 태핑 + 금융/결제 업무 외 신사업 부문도 챙겨보겠습니다(토스/쿠팡 등)"
+      },
+      {
+        name: "주디",
+        work: "Pjt C 실사 마무리 및 딜 대응, Pjt F SPA 및 딜구조 검토, Pjt M 자료정리 및 보고준비, Pjt J 투자검토, Pjt R 사업 및 구조 검토",
+        good: "Pjt C 딜구조 검토와 리스크 파악, 재무리스크 파악까지 1인 실사와 보고서를 깔끔하게 마무리. Pjt F도 늦게나마 보기 시작했지만 빠르게 방향을 잡고 처리 중",
+        bad: "Pjt C는 빠른 클로징이 예상됐으나 국토부 답변 대기로 속도를 내지 못함. Pjt M은 방향성이 바뀐 것 같아 계속 고민 중이나 다음 달에는 윤곽이 잡히도록 노력",
+        note: "Pjt F 원활한 클로징을 위해 최선을 다하겠습니다. 롱리스트는 거의 모빌리티(서비스) 업체인데, 부서 간 R&R과 역량에 대한 이해도를 높인 후 딜소싱 노력이 필요합니다"
+      },
+      {
+        name: "마롱",
+        work: "쏘카 주식보상제도(RSU) 기획, 차량운영효율화 프로젝트 지원(→ 기획), 벤츠 고객경험 프로그램 기획",
+        good: "쏘카 조직 파악(제도, 부서 간 R&R, 사내 서비스, 조직 문화 등)",
+        bad: "차량운영효율화 프로젝트를 주도적으로 못해본 점",
+        note: "아직도 차량운영효율화 관련 R&R이 찜찜함"
+      }
+    ]
+  }
+};
+
+const monthNav = document.getElementById('monthNav');
+const roster = document.getElementById('roster');
+const months = Object.keys(archiveData).sort().reverse();
+
+function renderMonth(key){
+  const data = archiveData[key];
+  roster.innerHTML = data.members.map(m => {
+    if (m.onLeave){
+      return `
+        <div class="member leave">
+          <div class="member-head">
+            <span class="name">${m.name}</span>
+            <span class="tag">${m.tag || '휴직'}</span>
+          </div>
+        </div>`;
+    }
+    return `
+      <div class="member">
+        <div class="member-head">
+          <span class="name">${m.name}</span>
+        </div>
+        <div class="blocks">
+          <div class="block work">
+            <div class="label">수행 업무</div>
+            <p>${m.work}</p>
+          </div>
+          <div class="block good">
+            <div class="label">잘한 점</div>
+            <p>${m.good}</p>
+          </div>
+          <div class="block bad">
+            <div class="label">아쉬운 점</div>
+            <p>${m.bad}</p>
+          </div>
+          <div class="block note">
+            <div class="label">추가 의견</div>
+            <p>${m.note}</p>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+
+  [...monthNav.children].forEach(btn=>{
+    btn.classList.toggle('active', btn.dataset.key === key);
+  });
+}
+
+months.forEach(key=>{
+  const btn = document.createElement('button');
+  btn.textContent = archiveData[key].label;
+  btn.dataset.key = key;
+  btn.onclick = ()=>renderMonth(key);
+  monthNav.appendChild(btn);
+});
+
+renderMonth(months[0]);
+</script>
+</body>
+</html>
