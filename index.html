@@ -1,0 +1,966 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>경영전략팀 회고록</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<style>
+  :root{
+    --paper: #F6F3EC;
+    --paper-raised: #FCFAF5;
+    --ink: #29281f;
+    --ink-soft: #6f6a58;
+    --rule: #d9d2bd;
+    --rule-strong: #c3b99c;
+    --accent: #2f4b3c;
+    --accent-soft: #e3e8dd;
+    --stamp: #9c3b28;
+    --danger: #9c3b28;
+    --radius: 3px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html,body{
+    margin:0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.6;
+  }
+
+  body{
+    background-image:
+      linear-gradient(var(--paper) 0%, var(--paper) 100%);
+  }
+
+  .serif{ font-family: 'Noto Serif KR', serif; }
+
+  a { color: var(--accent); }
+
+  /* ---------- shell ---------- */
+  .shell{
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 40px 20px 100px;
+  }
+
+  header.page-head{
+    display:flex;
+    align-items:flex-start;
+    gap:18px;
+    margin-bottom: 28px;
+  }
+
+  .seal{
+    flex: 0 0 auto;
+    width: 56px; height: 56px;
+    background: var(--stamp);
+    color: #f6f0e6;
+    display:flex; align-items:center; justify-content:center;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 22px;
+    letter-spacing: -1px;
+    transform: rotate(-3deg);
+    border-radius: 2px;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.08);
+    user-select:none;
+  }
+
+  h1{
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 700;
+    font-size: 26px;
+    margin: 2px 0 4px;
+    letter-spacing: -0.02em;
+  }
+
+  .page-head p{
+    margin:0;
+    color: var(--ink-soft);
+    font-size: 14px;
+  }
+
+  /* ---------- month tabs ---------- */
+  .tabbar{
+    display:flex;
+    align-items:flex-end;
+    gap: 4px;
+    overflow-x:auto;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+
+  .tab{
+    font-family: 'Noto Serif KR', serif;
+    font-size: 14px;
+    padding: 9px 16px 8px;
+    background: #ece7d9;
+    color: var(--ink-soft);
+    border: 1px solid var(--rule-strong);
+    border-bottom: none;
+    border-radius: 3px 3px 0 0;
+    cursor: pointer;
+    white-space: nowrap;
+    position: relative;
+    top: 1px;
+  }
+
+  .tab:hover{ color: var(--ink); }
+
+  .tab.active{
+    background: var(--paper-raised);
+    color: var(--ink);
+    border-color: var(--ink);
+    border-bottom: 2px solid var(--paper-raised);
+  }
+
+  .tab-add{
+    font-family: 'Pretendard', sans-serif;
+    font-size: 13px;
+    padding: 9px 12px 8px;
+    background: transparent;
+    color: var(--ink-soft);
+    border: none;
+    cursor: pointer;
+  }
+  .tab-add:hover{ color: var(--accent); }
+
+  .sheet{
+    background: var(--paper-raised);
+    border: 1px solid var(--ink);
+    border-top: none;
+    padding: 26px 24px 20px;
+  }
+
+  .sheet-tools{
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .month-label-edit{
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+  }
+  .month-label-edit input{
+    font-family:'Noto Serif KR', serif;
+    font-size: 19px;
+    font-weight: 700;
+    border:none;
+    background:transparent;
+    color: var(--ink);
+    width: 90px;
+    border-bottom: 1px dashed var(--rule-strong);
+  }
+  .month-label-edit input:focus{ outline:none; border-color: var(--accent); }
+  .month-label-edit span{ color: var(--ink-soft); font-size: 13px; }
+
+  .btn{
+    font-family:'Pretendard', sans-serif;
+    font-size: 13px;
+    padding: 7px 13px;
+    border: 1px solid var(--ink);
+    background: var(--paper-raised);
+    color: var(--ink);
+    border-radius: var(--radius);
+    cursor: pointer;
+  }
+  .btn:hover{ background: var(--ink); color: var(--paper-raised); }
+  .btn.primary{ background: var(--accent); border-color: var(--accent); color: #f6f0e6; }
+  .btn.primary:hover{ background: #23392d; }
+  .btn.ghost{ border-color: var(--rule-strong); color: var(--ink-soft); }
+  .btn.ghost:hover{ background: var(--accent-soft); color: var(--ink); }
+  .btn.danger-text{ border:none; background:none; color: var(--ink-soft); padding: 4px 6px; }
+  .btn.danger-text:hover{ background:none; color: var(--danger); }
+  .btn:disabled{ opacity: .3; cursor: default; }
+  .btn:disabled:hover{ background:none; color: var(--ink-soft); }
+
+  .btn-row{ display:flex; gap:8px; flex-wrap: wrap; }
+
+  /* ---------- entries ---------- */
+  .entry{
+    border-top: 1px solid var(--rule);
+    padding: 18px 0;
+  }
+  .entry:first-of-type{ border-top: 1px solid var(--rule); }
+
+  .entry-head{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .entry-head .name{
+    font-family:'Noto Serif KR', serif;
+    font-size: 16px;
+    font-weight: 700;
+    border: none;
+    background: var(--accent-soft);
+    padding: 4px 10px;
+    border-radius: 2px;
+    color: var(--ink);
+    min-width: 80px;
+  }
+  .entry-head input.name:focus{ outline: 1px solid var(--accent); }
+
+  .field-grid{
+    display:grid;
+    grid-template-columns: 96px 1fr;
+    gap: 8px 14px;
+  }
+
+  .field-grid label{
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    padding-top: 9px;
+  }
+
+  .field-grid textarea{
+    width:100%;
+    font-family:'Pretendard', sans-serif;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ink);
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    padding: 8px 10px;
+    resize: vertical;
+    min-height: 40px;
+  }
+  .field-grid textarea:focus{
+    outline:none;
+    border-color: var(--accent);
+    background: #fffef9;
+  }
+
+  .field-grid input[type=text],
+  .field-grid input[type=password]{
+    width:100%;
+    font-family:'Pretendard', sans-serif;
+    font-size: 13px;
+    color: var(--ink);
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    padding: 7px 9px;
+  }
+  .field-grid input[type=text]:focus,
+  .field-grid input[type=password]:focus{
+    outline:none;
+    border-color: var(--accent);
+  }
+
+  @media (max-width: 560px){
+    .field-grid{ grid-template-columns: 1fr; }
+    .field-grid label{ padding-top: 0; }
+  }
+
+  .add-entry{
+    margin-top: 6px;
+    width: 100%;
+    padding: 10px;
+    border: 1px dashed var(--rule-strong);
+    background: transparent;
+    color: var(--ink-soft);
+    font-size: 13px;
+    cursor:pointer;
+    border-radius: var(--radius);
+  }
+  .add-entry:hover{ border-color: var(--accent); color: var(--accent); }
+
+  /* ---------- export panel ---------- */
+  .export-panel{
+    margin-top: 36px;
+    border: 1px solid var(--rule-strong);
+    background: #ece7d9;
+    padding: 18px 20px;
+  }
+  .export-panel h2{
+    font-family:'Noto Serif KR', serif;
+    font-size: 15px;
+    margin: 0 0 4px;
+  }
+  .export-panel p{ margin: 0 0 14px; font-size: 13px; color: var(--ink-soft); }
+
+  .preview{
+    background: #fff;
+    border: 1px solid var(--rule);
+    padding: 14px 16px;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+    font-size: 12.5px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: 260px;
+    overflow-y: auto;
+    color: #3a382c;
+    margin-bottom: 12px;
+  }
+
+  /* ---------- data / sync panel ---------- */
+  .sync-panel{
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--rule-strong);
+    font-size: 13px;
+    color: var(--ink-soft);
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .toast{
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(12px);
+    background: var(--ink);
+    color: var(--paper-raised);
+    padding: 10px 18px;
+    border-radius: 3px;
+    font-size: 13px;
+    opacity: 0;
+    pointer-events:none;
+    transition: opacity .2s ease, transform .2s ease;
+  }
+  .toast.show{ opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  input[type=file]{ display:none; }
+
+  footer{
+    margin-top: 40px;
+    font-size: 12px;
+    color: var(--ink-soft);
+    text-align:center;
+  }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <header class="page-head">
+    <div class="seal">回顧</div>
+    <div>
+      <h1>경영전략팀 회고록</h1>
+      <p>매달 각자의 업무 · 잘한 점 · 아쉬운 점 · 하고 싶은 말을 남겨두는 페이지예요.</p>
+    </div>
+  </header>
+
+  <div class="tabbar" id="tabbar"></div>
+  <div class="sheet" id="sheet"></div>
+
+  <div class="export-panel">
+    <h2>자동 저장 연결 (깃허브)</h2>
+    <p>
+      깃허브 저장소랑 한 번 연결해두면, 수정할 때마다 자동으로 data.json이 커밋돼요.
+      매번 파일을 내려받고 다시 올릴 필요가 없어져요.
+    </p>
+    <div class="field-grid" style="margin-bottom:14px;">
+      <label>저장소</label>
+      <input type="text" id="ghRepo" placeholder="예: ellaoh-maker/ella-oh" value="ellaoh-maker/ella-oh">
+      <label>브랜치</label>
+      <input type="text" id="ghBranch" placeholder="main" value="main">
+      <label>파일 경로</label>
+      <input type="text" id="ghPath" placeholder="data.json" value="data.json">
+      <label>토큰</label>
+      <input type="password" id="ghToken" placeholder="github_pat_ 로 시작하는 토큰">
+    </div>
+    <div class="btn-row">
+      <button class="btn primary" id="ghConnectBtn">연결하기</button>
+      <button class="btn ghost" id="ghDisconnectBtn">연결 해제</button>
+    </div>
+    <p id="ghStatus" style="margin-top:10px; font-size:13px; color:var(--ink-soft);">아직 연결 안 됐어요 — 연결 전까지는 아래 수동 저장을 써주세요.</p>
+    <p style="margin-top:10px; font-size:12px; color:var(--ink-soft);">
+      토큰은 이 브라우저에만 저장되고 깃허브로 그대로 전달돼요. 저장소 하나에만 쓰기 권한을 준
+      <b>fine-grained personal access token</b>을 만들어서 쓰는 걸 추천해요 (Contents: Read and write 권한, 만료일 설정).
+    </p>
+  </div>
+
+  <div class="export-panel">
+    <h2>이번 달 내보내기</h2>
+    <p>원본 엑셀과 같은 표 형식(마크다운)으로 정리해 드려요. 복사하거나 파일로 받아서 공유하세요.</p>
+    <div class="preview" id="preview"></div>
+    <div class="btn-row">
+      <button class="btn" id="copyBtn">복사하기</button>
+      <button class="btn" id="downloadMdBtn">.md 파일로 받기</button>
+    </div>
+  </div>
+
+  <div class="export-panel">
+    <h2>수동 백업 (자동 저장 연결 안 했을 때)</h2>
+    <p>
+      위 자동 저장을 연결했다면 이 부분은 안 써도 돼요. 연결하지 않았다면, 이 페이지는 서버가 없어서
+      입력한 내용이 <b>내 브라우저에만</b> 임시 저장돼요. 아래 <b>data.json 저장</b>으로 파일을 받아
+      저장소의 data.json을 교체하고 커밋 · 푸시해주세요. 다른 사람이 올린 최신 data.json을 받았다면
+      <b>data.json 불러오기</b>로 반영할 수 있어요.
+    </p>
+    <div class="sync-panel">
+      <span id="syncStatus">브라우저에 임시 저장된 내용을 불러왔어요.</span>
+      <div class="btn-row">
+        <label class="btn ghost" for="importFile">data.json 불러오기</label>
+        <input type="file" id="importFile" accept="application/json">
+        <button class="btn primary" id="exportJsonBtn">data.json 저장</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>회고는 형식보다 꾸준함이에요. 부담 없이 적어주세요.</footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------------- fallback data (used if data.json can't be fetched, e.g. opened as a local file) ---------------- */
+const DEFAULT_DATA = {"months": [{"key": "2026-08", "label": "8월", "entries": [{"name": "플투", "work": "라이드플럭스 Deal 추진, 모두의주차장 Deal 추진, APEX 재무 모델링, STIC 투자 대응 IR. HR 기획 지원", "good": "투자 유치/투자/인수/자금 관점에서 각기 다른 스토리/숫자 만들었던 것", "bad": "던져놓은 것은 많은데, 이루어진 것이 부족한 것 같음.", "note": "회사 HR 기조에 따라 하반기 선택과 집중 필요"}, {"name": "체라", "work": "F - SPA 검토, 라이드 검토, 라이드플럭스 IPO 예심청구 대응/구주거래, 27년 사업계획 사전준비, 기업소개서, Proj.M", "good": "라이드플럭스 예심청구 대응 과정에서 회사 관점에서 이익과 리스크를 먼저 생각하는 방식으로 조금 성장 (제이크의 가르침 실전 적용..) / 기업소개서 초안 잘 잡고, 드디어 디자인 착수 코앞까지 진행", "bad": "SPA 검토 속도를 잘 내지 못했음..", "note": "SPA 추석전에 마무리하고 / 라플 구주 거래도 원활하게 진행될 수 있도록 챙기기 / 사업계획 잘 진행 / 라이드의 크리에이티브한... 구조 고민 필요"}, {"name": "메텔(휴직)", "work": "", "good": "", "bad": "", "note": ""}, {"name": "릴로", "work": "2Q 실적발표, 반기보고서 작성 및 제출, 제8차 이사회·감사위원회 운영, 자기주식 매입 운용, 스톡옵션 전수 점검·취소 공시, 신설법인 설립 추진, 키움증권 유튜브 IR 촬영, 임원배상책임보험 갱신", "good": "실적발표, 반기보고서, 이사회, 감사위원회 일정 차질없이 완료.\n신규 법인 설립 과정에서 정관 중복 리스크 확인 및 대응안 제시", "bad": "실적발표·이사회·반기보고서 마감이 한 주에 겹치면서 반기보고서를 짧게 압축해 진행하게 된 점..", "note": "스톡옵션 데이터 간소화 작업"}, {"name": "뮤", "work": "2Q 실적발표, 쏘카 이사회, 에이펙스 100억&650억 유상증자, 에이펙스 주식사무 총괄, 자금전략 TF 질의 대응, 벤츠 고객경험 프로그램 기획 및 미팅, Pjt C TDD", "good": "주식사무 큰 이슈 없이 클리어함, 2Q 실적발표 큰 잡음 없이 매끄럽게 처리, TDD 빠르게 완료, 벤츠 미팅 속도감 있게 진행", "bad": "자금전략 TF 주도적 진행하지 못하고 간접지원에 그침, Pjt F 체라랑 주디한테 미룸\n+ 기업소개서 엘라랑 체라한테 미룸", "note": "하반기에는 더 새로운 업무에 집중하고, 기존 업무들은 빠르게 쳐낼 수 있었으면 좋겠음 (특히 이사회 업무에 너무 많은 시간 할애하지 않도록...)"}, {"name": "엘라", "work": "신한금융그룹 여신 확보 추진 및 금리협상/심사 자료 준비,  하나은행 신디케이션 deal 구조 확정,  기업소개서, 토스페이 도입 추진 및 기타 pg사 전반적 검토 진행(법무/보안/개발 등)", "good": "(1금융권) 최종적으로 원하는 금리 내 여신 확보, (금융/결제) 대내외 유관부서간 원활한 업무 협의", "bad": "확장성있는 신사업추진필요(보험, pg 등...)", "note": "금융 제휴기관 추가 거래 태핑 + 금융/결제 업무 외 신사업부분도 챙겨보겠습니다 (토스/쿠팡 등)"}, {"name": "주디", "work": "Pjt C 실사 마무리 + 딜 대응 / Pjt F SPA 및 딜구조 검토\nPjt M 자료정리 및 보고준비 / Pjt J 투자검토\nPjt R 사업 및 구조 검토 / 마지막삼십분 구조검토", "good": "Pjt C 딜구조 검토와 관련 리스크파악, 재무리스크 파악까지 1인실사 + 보고서까지 깔끔하게 마무리\nPjt F 도 늦게나마 보기 시작했는데 빠르게 방향성잡고 쳐내고 있다고 생각..", "bad": "Pjt C 빠른 클로징 예상되었던 C가 국토부 답변 대기중으로 속도를 내지 못하고 있음..\nPjt M 방향성이 바뀐 것 같아 계속 고민 중이기는 한데, 잠재투자자.. 다음달에는 윤곽이 잡힐 수 있도록 노력", "note": "Pjt F 원활한 클로징을 위해 최선을 다하겠습니다. 이번달안에는 꼭 도장찍을 수 있도록... \n\n롱리스트 - 거의 모빌리티(서비스 업체)인데 업데이트\n내부 부서간 R&R이나 역량에 대한 이해도 높인 후 딜소싱 노력필요!"}, {"name": "마롱", "work": "쏘카 주식보상제도(RSU) 기획, 차량운영효율화 프로젝트 지원(-> 기획), 벤츠 고객경험 프로그램 기획", "good": "쏘카 조직 파악 (제도, 부서간 R&R, 사내 서비스, 성격(문화)..등)", "bad": "차량운영효율화 프로젝트 (주도적으로 못해본 점)..", "note": "아직도 차량운영효율화 플젝 R&R이 찜찜함"}]}, {"key": "2026-09", "label": "9월", "entries": [{"name": "플투", "work": "", "good": "", "bad": "", "note": ""}, {"name": "체라", "work": "", "good": "", "bad": "", "note": ""}, {"name": "메텔(휴직)", "work": "", "good": "", "bad": "", "note": ""}, {"name": "릴로", "work": "", "good": "", "bad": "", "note": ""}, {"name": "뮤", "work": "", "good": "", "bad": "", "note": ""}, {"name": "엘라", "work": "", "good": "", "bad": "", "note": ""}, {"name": "주디", "work": "", "good": "", "bad": "", "note": ""}, {"name": "마롱", "work": "", "good": "", "bad": "", "note": ""}]}]};
+
+const ROSTER = ["플투","체라","메텔(휴직)","릴로","뮤","엘라","주디","마롱"];
+const LS_KEY = "retro-page-draft-v1";
+
+let state = null;      // { months: [...] }
+let activeKey = null;
+let viewMode = true;   // start in read-only view; toggle to edit with the button
+
+const $tabbar = document.getElementById('tabbar');
+const $sheet = document.getElementById('sheet');
+const $preview = document.getElementById('preview');
+const $syncStatus = document.getElementById('syncStatus');
+const $toast = document.getElementById('toast');
+
+function toast(msg){
+  $toast.textContent = msg;
+  $toast.classList.add('show');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(()=> $toast.classList.remove('show'), 2200);
+}
+
+/* ---------------- GitHub auto-save ----------------
+   Once connected, every edit is committed straight to the repo's data.json
+   via the GitHub Contents API, so nobody has to download/upload it by hand.
+   The token lives only in this browser's localStorage. */
+const GH_KEY = "retro-gh-config-v1";
+let ghConfig = null;
+try { ghConfig = JSON.parse(localStorage.getItem(GH_KEY) || 'null'); } catch(e){ ghConfig = null; }
+let ghSaveTimer = null;
+let ghSaving = false;
+
+function saveGhConfig(cfg){ try{ localStorage.setItem(GH_KEY, JSON.stringify(cfg)); }catch(e){} }
+function clearGhConfig(){ try{ localStorage.removeItem(GH_KEY); }catch(e){} }
+
+function utf8ToB64(str){ return btoa(unescape(encodeURIComponent(str))); }
+function b64ToUtf8(str){ return decodeURIComponent(escape(atob(str.replace(/\n/g, '')))); }
+function ghApiUrl(owner, repo, path){ return `https://api.github.com/repos/${owner}/${repo}/contents/${path.split('/').map(encodeURIComponent).join('/')}`; }
+
+async function ghFetchFile(cfg){
+  const url = `${ghApiUrl(cfg.owner, cfg.repo, cfg.path)}?ref=${encodeURIComponent(cfg.branch)}&t=${Date.now()}`;
+  const res = await fetch(url, {
+    headers: { 'Authorization': `token ${cfg.token}`, 'Accept': 'application/vnd.github+json' }
+  });
+  if (!res.ok) throw new Error(`불러오기 실패 (${res.status})`);
+  const json = await res.json();
+  return { content: b64ToUtf8(json.content), sha: json.sha };
+}
+
+async function ghPutFile(cfg, contentStr, message){
+  const res = await fetch(ghApiUrl(cfg.owner, cfg.repo, cfg.path), {
+    method: 'PUT',
+    headers: {
+      'Authorization': `token ${cfg.token}`,
+      'Accept': 'application/vnd.github+json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ message: message || '회고록 자동 저장', content: utf8ToB64(contentStr), sha: cfg.sha, branch: cfg.branch })
+  });
+  if (!res.ok) throw new Error(`저장 실패 (${res.status})`);
+  const json = await res.json();
+  return json.content.sha;
+}
+
+function setGhStatus(text, isError){
+  const el = document.getElementById('ghStatus');
+  if (!el) return;
+  el.textContent = text;
+  el.style.color = isError ? 'var(--danger)' : 'var(--ink-soft)';
+}
+
+function fillGhForm(){
+  if (!ghConfig) return;
+  const repoInput = document.getElementById('ghRepo');
+  const branchInput = document.getElementById('ghBranch');
+  const pathInput = document.getElementById('ghPath');
+  if (repoInput) repoInput.value = `${ghConfig.owner}/${ghConfig.repo}`;
+  if (branchInput) branchInput.value = ghConfig.branch;
+  if (pathInput) pathInput.value = ghConfig.path;
+}
+
+async function connectGithub(){
+  const repoRaw = document.getElementById('ghRepo').value.trim();
+  const branch = document.getElementById('ghBranch').value.trim() || 'main';
+  const path = document.getElementById('ghPath').value.trim() || 'data.json';
+  const token = document.getElementById('ghToken').value.trim();
+  const parts = repoRaw.split('/').map(s => s.trim()).filter(Boolean);
+  if (parts.length !== 2){
+    setGhStatus('저장소는 "계정명/저장소명" 형태로 입력해주세요 (예: ellaoh-maker/ella-oh)', true);
+    return;
+  }
+  if (!token){
+    setGhStatus('토큰을 입력해주세요.', true);
+    return;
+  }
+  const [owner, repo] = parts;
+  const cfg = { owner, repo, branch, path, token, sha: null };
+  setGhStatus('연결 확인 중...');
+  try{
+    const { content, sha } = await ghFetchFile(cfg);
+    cfg.sha = sha;
+    ghConfig = cfg;
+    saveGhConfig(ghConfig);
+    const parsed = JSON.parse(content);
+    if (parsed && parsed.months){
+      state = parsed;
+      activeKey = state.months[state.months.length - 1].key;
+      saveDraft();
+      render();
+    }
+    document.getElementById('ghToken').value = '';
+    setGhStatus(`연결됐어요 — ${owner}/${repo}의 최신 내용을 불러왔어요. 이제부터 자동으로 저장돼요.`);
+  }catch(err){
+    setGhStatus(`연결 실패: ${err.message}. 저장소 이름 · 브랜치 · 토큰 권한을 확인해주세요.`, true);
+  }
+}
+
+function disconnectGithub(){
+  ghConfig = null;
+  clearGhConfig();
+  setGhStatus('연결을 해제했어요. 이제부터는 수동으로 저장해야 해요.');
+}
+
+function scheduleAutoSave(){
+  if (!ghConfig) return;
+  clearTimeout(ghSaveTimer);
+  setGhStatus('입력 중... 잠시 후 자동 저장돼요');
+  ghSaveTimer = setTimeout(doAutoSave, 1500);
+}
+
+async function doAutoSave(){
+  if (!ghConfig || ghSaving) return;
+  ghSaving = true;
+  setGhStatus('저장 중...');
+  const content = JSON.stringify(state, null, 2);
+  try{
+    const newSha = await ghPutFile(ghConfig, content, '회고록 자동 저장');
+    ghConfig.sha = newSha;
+    saveGhConfig(ghConfig);
+    const now = new Date();
+    setGhStatus(`자동 저장됨 · ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`);
+  }catch(err){
+    try{
+      const { sha } = await ghFetchFile(ghConfig);
+      ghConfig.sha = sha;
+      const newSha = await ghPutFile(ghConfig, content, '회고록 자동 저장 (재시도)');
+      ghConfig.sha = newSha;
+      saveGhConfig(ghConfig);
+      setGhStatus('자동 저장됨 (재시도 성공)');
+    }catch(err2){
+      setGhStatus(`자동 저장 실패: ${err2.message}. 저장소 권한이나 토큰 만료를 확인해주세요.`, true);
+    }
+  }finally{
+    ghSaving = false;
+  }
+}
+
+function saveDraft(){
+  try{ localStorage.setItem(LS_KEY, JSON.stringify(state)); }catch(e){}
+  scheduleAutoSave();
+}
+
+function monthKeyLabel(){
+  const now = new Date();
+  return { key: `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`, label: `${now.getMonth()+1}월` };
+}
+
+function blankMonth(label, key){
+  // New months start empty — whatever order you add teammates in (via "+ 팀원 추가")
+  // becomes the display order. No preset list, so nobody is ever "stuck" at the top.
+  return { key, label, entries: [] };
+}
+
+async function loadInitialState(){
+  if (ghConfig){
+    try{
+      const { content, sha } = await ghFetchFile(ghConfig);
+      ghConfig.sha = sha;
+      saveGhConfig(ghConfig);
+      $syncStatus.textContent = `깃허브(${ghConfig.owner}/${ghConfig.repo})에서 최신 내용을 불러왔어요.`;
+      setGhStatus(`연결됨 — ${ghConfig.owner}/${ghConfig.repo}`);
+      return JSON.parse(content);
+    }catch(e){
+      setGhStatus(`불러오기 실패: ${e.message}. 브라우저에 저장된 내용으로 시작해요.`, true);
+    }
+  }
+  const draft = localStorage.getItem(LS_KEY);
+  if (draft){
+    try{
+      $syncStatus.textContent = "브라우저에 임시 저장된 내용을 불러왔어요.";
+      return JSON.parse(draft);
+    }catch(e){}
+  }
+  try{
+    const res = await fetch('./data.json', { cache: 'no-store' });
+    if (res.ok){
+      $syncStatus.textContent = "data.json에서 불러왔어요.";
+      return await res.json();
+    }
+  }catch(e){ /* fetch blocked (e.g. file://) — fall back below */ }
+  $syncStatus.textContent = "이 브라우저에서 data.json을 불러올 수 없어 기본 내용으로 시작해요. (깃허브 페이지에 올리면 자동으로 불러와요)";
+  return JSON.parse(JSON.stringify(DEFAULT_DATA));
+}
+
+function ensureCurrentMonthTab(){
+  const { key, label } = monthKeyLabel();
+  if (!state.months.some(m => m.key === key)){
+    state.months.push(blankMonth(label, key));
+  }
+}
+
+function renderTabs(){
+  $tabbar.innerHTML = '';
+  state.months.forEach(m => {
+    const el = document.createElement('button');
+    el.className = 'tab' + (m.key === activeKey ? ' active' : '');
+    el.textContent = m.label;
+    el.addEventListener('click', () => { activeKey = m.key; render(); });
+    $tabbar.appendChild(el);
+  });
+  const addBtn = document.createElement('button');
+  addBtn.className = 'tab-add';
+  addBtn.textContent = '+ 새 달';
+  addBtn.addEventListener('click', () => {
+    const label = prompt('새로 추가할 달의 이름을 입력하세요 (예: 10월)');
+    if (!label) return;
+    const key = label + '-' + Date.now();
+    const m = blankMonth(label, key);
+    state.months.push(m);
+    activeKey = key;
+    saveDraft();
+    render();
+  });
+  $tabbar.appendChild(addBtn);
+}
+
+function currentMonth(){
+  return state.months.find(m => m.key === activeKey);
+}
+
+function renderSheet(){
+  const month = currentMonth();
+  $sheet.innerHTML = '';
+
+  const tools = document.createElement('div');
+  tools.className = 'sheet-tools';
+
+  const labelWrap = document.createElement('div');
+  labelWrap.className = 'month-label-edit';
+  if (viewMode){
+    const labelText = document.createElement('span');
+    labelText.className = 'serif';
+    labelText.style.fontSize = '19px';
+    labelText.style.fontWeight = '700';
+    labelText.style.color = 'var(--ink)';
+    labelText.textContent = month.label;
+    labelWrap.appendChild(labelText);
+    const labelHint = document.createElement('span');
+    labelHint.textContent = ' 회고';
+    labelWrap.appendChild(labelHint);
+  } else {
+    const labelInput = document.createElement('input');
+    labelInput.value = month.label;
+    labelInput.addEventListener('input', () => { month.label = labelInput.value; saveDraft(); renderTabs(); });
+    const labelHint = document.createElement('span');
+    labelHint.textContent = '회고';
+    labelWrap.appendChild(labelInput);
+    labelWrap.appendChild(labelHint);
+  }
+  tools.appendChild(labelWrap);
+
+  const modeBtn = document.createElement('button');
+  modeBtn.className = 'btn' + (viewMode ? ' primary' : '');
+  modeBtn.textContent = viewMode ? '✎ 내용 입력하기' : '완료 (보기 전용으로)';
+  modeBtn.addEventListener('click', () => { viewMode = !viewMode; renderSheet(); });
+
+  if (!viewMode){
+    const delMonthBtn = document.createElement('button');
+    delMonthBtn.className = 'btn ghost';
+    delMonthBtn.textContent = '이 달 삭제';
+    delMonthBtn.addEventListener('click', () => {
+      if (state.months.length <= 1) { toast('최소 한 개의 달은 남아있어야 해요'); return; }
+      if (!confirm(`'${month.label}' 페이지를 삭제할까요?`)) return;
+      state.months = state.months.filter(m => m.key !== month.key);
+      activeKey = state.months[state.months.length-1].key;
+      saveDraft();
+      render();
+    });
+    const btnGroup = document.createElement('div');
+    btnGroup.className = 'btn-row';
+    btnGroup.appendChild(modeBtn);
+    btnGroup.appendChild(delMonthBtn);
+    tools.appendChild(btnGroup);
+  } else {
+    tools.appendChild(modeBtn);
+  }
+
+  $sheet.appendChild(tools);
+
+  if (month.entries.length === 0){
+    const empty = document.createElement('p');
+    empty.style.color = 'var(--ink-soft)';
+    empty.style.fontSize = '14px';
+    empty.style.margin = '4px 0 16px';
+    empty.textContent = viewMode
+      ? '아직 아무도 작성하지 않았어요. "내용 입력하기"를 눌러 팀원을 추가해보세요.'
+      : '아래 "+ 팀원 추가"를 눌러 작성할 사람을 한 명씩 추가하세요. 추가하는 순서대로 표시돼요.';
+    $sheet.appendChild(empty);
+  }
+
+  month.entries.forEach((entry, idx) => {
+    $sheet.appendChild(viewMode ? renderEntryView(entry) : renderEntry(month, entry, idx));
+  });
+
+  if (!viewMode){
+    const addEntryBtn = document.createElement('button');
+    addEntryBtn.className = 'add-entry';
+    addEntryBtn.textContent = '+ 팀원 추가';
+    addEntryBtn.addEventListener('click', () => {
+      month.entries.push({ name:'새 팀원', work:'', good:'', bad:'', note:'' });
+      saveDraft();
+      renderSheet();
+      renderPreview();
+    });
+    $sheet.appendChild(addEntryBtn);
+  }
+}
+
+const FIELD_DEFS = [
+  ['work', '수행 업무'],
+  ['good', '잘한 점'],
+  ['bad', '아쉬운 점'],
+  ['note', '추가 의견'],
+];
+
+function renderEntryView(entry){
+  const wrap = document.createElement('div');
+  wrap.className = 'entry';
+
+  const head = document.createElement('div');
+  head.className = 'entry-head';
+  const nameEl = document.createElement('span');
+  nameEl.className = 'name';
+  nameEl.style.display = 'inline-block';
+  nameEl.textContent = entry.name || '(이름 없음)';
+  head.appendChild(nameEl);
+  wrap.appendChild(head);
+
+  const grid = document.createElement('div');
+  grid.className = 'field-grid';
+  FIELD_DEFS.forEach(([key, label]) => {
+    const lab = document.createElement('label');
+    lab.textContent = label;
+    const val = document.createElement('div');
+    val.style.whiteSpace = 'pre-wrap';
+    val.style.fontSize = '14px';
+    val.style.lineHeight = '1.55';
+    val.style.padding = '8px 10px';
+    val.style.color = entry[key] ? 'var(--ink)' : 'var(--ink-soft)';
+    val.textContent = entry[key] || '아직 작성되지 않았어요';
+    grid.appendChild(lab);
+    grid.appendChild(val);
+  });
+  wrap.appendChild(grid);
+  return wrap;
+}
+
+function renderEntry(month, entry, idx){
+  const wrap = document.createElement('div');
+  wrap.className = 'entry';
+
+  const head = document.createElement('div');
+  head.className = 'entry-head';
+  const nameInput = document.createElement('input');
+  nameInput.className = 'name';
+  nameInput.value = entry.name;
+  nameInput.addEventListener('input', () => { entry.name = nameInput.value; saveDraft(); renderPreview(); });
+  head.appendChild(nameInput);
+
+  const delBtn = document.createElement('button');
+  delBtn.className = 'btn danger-text';
+  delBtn.textContent = '이 사람 삭제';
+  delBtn.style.marginLeft = 'auto';
+  delBtn.addEventListener('click', () => {
+    month.entries.splice(idx, 1);
+    saveDraft();
+    renderSheet();
+    renderPreview();
+  });
+  head.appendChild(delBtn);
+  wrap.appendChild(head);
+
+  const grid = document.createElement('div');
+  grid.className = 'field-grid';
+
+  FIELD_DEFS.forEach(([key, label]) => {
+    const lab = document.createElement('label');
+    lab.textContent = label;
+    const ta = document.createElement('textarea');
+    ta.value = entry[key];
+    ta.rows = 2;
+    ta.addEventListener('input', () => {
+      entry[key] = ta.value;
+      saveDraft();
+      renderPreview();
+    });
+    grid.appendChild(lab);
+    grid.appendChild(ta);
+  });
+
+  wrap.appendChild(grid);
+  return wrap;
+}
+
+function toMarkdown(month){
+  const header = `## ${month.label} 회고\n\n| 구분 | 수행 업무 | 잘한 점 | 아쉬운 점 | 추가 의견 |\n| --- | --- | --- | --- | --- |`;
+  const rows = month.entries.map(e => {
+    const clean = s => (s||'').replace(/\n/g, '<br>').replace(/\|/g, '\\|');
+    return `| ${clean(e.name)} | ${clean(e.work)} | ${clean(e.good)} | ${clean(e.bad)} | ${clean(e.note)} |`;
+  });
+  return [header, ...rows].join('\n');
+}
+
+function renderPreview(){
+  const month = currentMonth();
+  $preview.textContent = toMarkdown(month);
+}
+
+function render(){
+  renderTabs();
+  renderSheet();
+  renderPreview();
+}
+
+/* ---------------- export / import ---------------- */
+document.getElementById('copyBtn').addEventListener('click', () => {
+  navigator.clipboard.writeText($preview.textContent).then(() => toast('복사했어요'));
+});
+
+document.getElementById('downloadMdBtn').addEventListener('click', () => {
+  const month = currentMonth();
+  const blob = new Blob([toMarkdown(month)], { type: 'text/markdown' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `${month.label}-회고록.md`;
+  a.click();
+  toast('다운로드했어요');
+});
+
+document.getElementById('exportJsonBtn').addEventListener('click', () => {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'data.json';
+  a.click();
+  toast('data.json을 받았어요 — 저장소에 올려주세요');
+});
+
+document.getElementById('importFile').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try{
+      const parsed = JSON.parse(reader.result);
+      if (!parsed.months) throw new Error('형식이 달라요');
+      state = parsed;
+      activeKey = state.months[state.months.length-1].key;
+      saveDraft();
+      $syncStatus.textContent = `${file.name} 파일을 불러왔어요.`;
+      render();
+      toast('불러왔어요');
+    }catch(err){
+      toast('파일을 읽을 수 없어요. data.json 형식인지 확인해주세요');
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+});
+
+document.getElementById('ghConnectBtn').addEventListener('click', connectGithub);
+document.getElementById('ghDisconnectBtn').addEventListener('click', disconnectGithub);
+fillGhForm();
+if (ghConfig){ setGhStatus(`연결됨 — ${ghConfig.owner}/${ghConfig.repo} (불러오는 중...)`); }
+
+/* ---------------- live-ish refresh ----------------
+   Polls for the latest saved content every 20s so other viewers see updates
+   without reloading the page. Only runs in read-only view mode, so it never
+   overwrites someone in the middle of typing. */
+function cacheOnly(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(state)); }catch(e){} }
+
+let pollTimer = null;
+
+async function pollForUpdates(){
+  if (!viewMode) return;
+  try{
+    let fresh;
+    if (ghConfig){
+      const { content } = await ghFetchFile(ghConfig);
+      fresh = JSON.parse(content);
+    } else {
+      const res = await fetch('./data.json', { cache: 'no-store' });
+      if (!res.ok) return;
+      fresh = await res.json();
+    }
+    if (JSON.stringify(fresh) !== JSON.stringify(state)){
+      const prevKey = activeKey;
+      state = fresh;
+      activeKey = state.months.some(m => m.key === prevKey) ? prevKey : state.months[state.months.length - 1].key;
+      cacheOnly();
+      render();
+      toast('최신 내용으로 업데이트됐어요');
+    }
+  }catch(e){ /* transient network/auth errors are fine to ignore here */ }
+}
+
+function startPolling(){
+  clearInterval(pollTimer);
+  pollTimer = setInterval(pollForUpdates, 20000);
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden){
+    clearInterval(pollTimer);
+  } else {
+    pollForUpdates();
+    startPolling();
+  }
+});
+
+/* ---------------- boot ---------------- */
+(async function boot(){
+  state = await loadInitialState();
+  ensureCurrentMonthTab();
+  activeKey = state.months[state.months.length-1].key;
+  render();
+  startPolling();
+})();
+</script>
+</body>
+</html>
